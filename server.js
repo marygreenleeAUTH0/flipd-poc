@@ -11,6 +11,8 @@ if (process.env.NODE_ENV !== 'production') {
 
 const { auth } = require("express-oauth2-jwt-bearer");
 const authConfig = require("./auth_config.js");
+const PORT = process.env.PORT || 3000
+
 
 // create the JWT middleware
 const checkJwt = auth({
@@ -30,7 +32,7 @@ app.get("/*", (_, res) => {
   res.sendFile(join(__dirname, "index.html"));
 });
 // Listen on port 3000
-app.listen(3000, () => console.log("Application running on port 3000"));
+app.listen(PORT, () => console.log("Application running on port 3000"));
 
 process.on("SIGINT", function() {
   process.exit();
