@@ -5,8 +5,13 @@ const helmet = require("helmet");
 const app = express();
 // .. other imports
 
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config()
+}
+
 const { auth } = require("express-oauth2-jwt-bearer");
-const authConfig = require("./auth_config.json");
+const authConfig = require("./auth_config.js");
+
 // create the JWT middleware
 const checkJwt = auth({
   audience: authConfig.audience,
@@ -18,7 +23,7 @@ app.use(helmet());
 app.use(express.static(join(__dirname, "public")));
 
 app.get("/auth_config.json", (req, res) => {
-  res.sendFile(join(__dirname, "auth_config.json"));
+  res.json(authConfig);
 });
 
 app.get("/*", (_, res) => {

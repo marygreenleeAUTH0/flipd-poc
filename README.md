@@ -12,8 +12,8 @@ To specify the application client ID and domain, make a copy of `auth_config.jso
 
 ```json
 {
-  "domain": "dine-flipd-poc.us.auth0.com",
-  "clientId": "k85l8BjqgW5uL8vML1voRSLFWUnbLMia"
+  "domain": "<your-auth0-domain>",
+  "clientId": "<your-client-id>"
 }
 ```
 
