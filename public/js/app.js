@@ -44,13 +44,14 @@ const fetchAuthConfig = () => fetch("/auth_config.json");
 /**
  * Initializes the Auth0 client
  */
-const configureClient = async () => {
+ const configureClient = async () => {
   const response = await fetchAuthConfig();
   const config = await response.json();
 
   auth0 = await createAuth0Client({
     domain: config.domain,
-    client_id: config.clientId
+    client_id: config.clientId,
+    audience: config.audience   // NEW - add the audience value
   });
 };
 
@@ -93,6 +94,9 @@ window.onload = async () => {
     }
   });
 
+ // public/js/app.js
+
+
   const isAuthenticated = await auth0.isAuthenticated();
 
   if (isAuthenticated) {
@@ -125,4 +129,31 @@ window.onload = async () => {
   }
 
   updateUI();
+};
+const callApi = async () => {
+  try {
+
+    // Get the access token from the Auth0 client
+    const token = await auth0.getTokenSilently();
+
+    // Make the call to the API, setting the token
+    // in the Authorization header
+    const response = await fetch("/api/external", {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+
+    // Fetch the JSON result
+    const responseData = await response.json();
+
+    // Display the result in the output element
+    const responseElement = document.getElementById("api-call-result");
+
+    responseElement.innerText = JSON.stringify(responseData, {}, 2);
+
+} catch (e) {
+    // Display errors in the console
+    console.error(e);
+  }
 };
